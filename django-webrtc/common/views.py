@@ -19,6 +19,13 @@ def save(request):
         file = open('test1.png', mode="wb")
         file.write(d)
         file.close()
+        '''
+        to save into a newly created folder /upload/2020/09/14/yyymmmdddsss.png
+        primary no, drone id, image path, file name, saved timestamp, counterpart ip address
+        gps position, client position, by collecting data from the broswer 
+        address (obtained from the client)
+        list, detail page, delete
+        '''
         print(img)
         print(id)
         print(pwd)
