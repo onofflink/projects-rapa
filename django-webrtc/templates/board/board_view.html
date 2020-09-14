@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container" style="margin-top:20px">
+  <h2>게시판 상세보기</h2>
+  <p></p>
+  <form name="form">
+  <table class="table">
+  	<colgroup>
+  		<col width="25%"/>
+  		<col width="*"/>
+  	</colgroup>
+    
+    <tbody>
+      <tr>
+      	<td>제목</td>
+        <td>{{board.title}}
+  		</td>
+     </tr>      
+      <tr >
+        <td>작성자</td>
+        <td>{{board.writer}}</td>
+     
+      </tr>
+      <tr >
+        <td>내용</td>
+        <td>{{board.contents | linebreaksbr}} 
+        </td>
+      
+      </tr>
+     
+       <tr >
+        <td></td>
+        <td></td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+  	<div class="container" style="text-align:right">
+	  <div class="btn-group">
+	    
+	    <button type="button" class="btn btn-primary" onclick="goModify()">수정</button>&nbsp;&nbsp;
+	    <button type="button" class="btn btn-danger"  onclick="goDelete()">삭제</button>&nbsp;&nbsp;
+		  <button type="button" class="btn btn-primary" onclick="goList()">목록</button>
+	  </div>
+	</div>
+</form>	
+</div>
+
+<script>
+function goModify(){
+  //document-html 문서를 말하고 document에 name속성이 form인 객체를 가져와라 
+  frm = document.form; 
+  frm.action="/board/modify/{{board.id}}";
+  frm.method="get";
+  frm.submit();
+}
+
+function goList(){
+  location.href="/board/list"; //get방식으로 페이지 넘길때
+
+  /*
+  frm = document.form; 
+  frm.action="/board/list/";
+  frm.method="get";
+  frm.submit();
+  */
+}
+
+function goDelete()
+{
+  frm = document.form; 
+  frm.action="/board/delete/{{board.id}}";
+  frm.method="get";
+  frm.submit();
+}
+
+</script>
+
+{% endblock %}
