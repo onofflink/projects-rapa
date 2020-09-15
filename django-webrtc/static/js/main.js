@@ -107,8 +107,7 @@ function snapPhoto() {
 
 
 function start(){
-  //timerId = setInterval(snapAndSend,3000);
-  sendPhoto();
+  timerId = setInterval(snapAndSend,3000);
   startBtn.disabled = true
 }
 function id_input(){ 
@@ -148,10 +147,10 @@ function sendPhoto() {
       type: "POST",
       headers:{"Authorization":'KakaoAK 876e9dd3cee1b67c2f15c6a58cd44f9c'},
       url: "https://dapi.kakao.com/v2/local/geo/coord2address.json?x="+longitude+"&y="+latitude+"&input_coord=WGS84",  //받아서 저장하자 
-      //url:'/save',
     }).done(function(msg){ 
-      console.log(msg)
-      //ajax_send(msg[""])  
+      var address = msg['documents'][0]['address']
+      //console.log(address['address_name'])
+      ajax_send(longitude,latitude,address['address_name'])  
     }
     )
  
@@ -162,10 +161,8 @@ function ajax_send(x, y, address)
   var dataURL = photo.toDataURL();
   $.ajax({  
     type: "POST",
-    //headers:{"Authorization":'KakaoAK 876e9dd3cee1b67c2f15c6a58cd44f9c'},
-    //url: "http://localhost:9000/sample/json/canvas_ajax_upload_post.php",  //받아서 저장하자 
     url:'/save',
-    data: {'d_id':d_id.value, 'img': dataURL}      
+    data: {'d_id':d_id.value, 'img': dataURL, 'x':x, 'y':y,'add':address}      
   }).done(function(msg){ 
     console.log(msg); 
   });

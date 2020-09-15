@@ -42,10 +42,11 @@
     <thead class="table-primary">
       <tr>
         <th>번호</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>작성일</th>
-        <th>조회수</th>
+        <th>드론id</th>
+        <th>이미지 경로</th>
+        <th>이미지 이름</th>
+
+
       </tr>
     </thead>
     <tbody>
@@ -60,11 +61,11 @@
                 <!-- board 아까 urls.py파일에 app_name, path의 인자 name 
                     app_name:path의 name속성값 
                 -->
-                <a href="{%url 'board:view' board.id %}">{{ board.title }}</a>
+                <a href="{%url 'board:view' board.id %}">{{ board.d_id }}</a>
             </td>
-            <td>{{ board.writer }}</td>
-            <td>{{ board.wdate }}</td>
-            <td>{{ board.hit }}</td>
+            <td>{{ board.img_path }}</td>
+            <td>{{ board.img_name }}</td>
+
         </tr>
         {% endfor %}
         {% else %}

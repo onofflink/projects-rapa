@@ -1,30 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from common.models import DroneDataModels
+from .forms import BoardForm
+from django.utils import timezone 
+from django.shortcuts import redirect 
+
 # Create your views here.
 
 def index(request):
     return HttpResponse("This is my board")
 
-def myname(request, cnt):
-    name=''
-    for i in range(1, cnt+1):
-        name = name + "홍길동<br>"
-    return HttpResponse(name) 
-
-from .models import Board 
 def list(request):
     #'templates/board/board_list.html'
     #장고프레임워크에서 제공한다. 모델객체에서 objects().all()
     #내부적으로 자동쿼리 생성 
-    board_list = Board.objects.all()
+    board_list = DroneDataModels.objects.all()
     return render(request, 'board/board_list.html',
      {'question_list':board_list} )
 
 #/project/myhome/board/views.py 
-from .forms import BoardForm 
-from .models import Board 
-from django.utils import timezone #######################
-from django.shortcuts import redirect 
+
 
 def write(request):
     #폼객체를 만들어서 render 의 세번째 인자로 전달하자 
@@ -40,7 +35,6 @@ def save(request):
     #True로 지정하면 바로 db로 저장되기 때문에 중간에, 저장은 막고 
     #모델 객체만 반환받으려면 commit 속성을 반드시 False로 해줘야 한다 
      #이 두 요소는 form 객체에 없었음 
-    board.wdate = timezone.now() 
     board.save() # 모델내의 save함수를 호출하여  db에 저장한다 
     return redirect('board:list')
 
@@ -51,8 +45,7 @@ def view(request, id):
     #get_object_or_404 - 혹시나 id값을 안갖고 오거나 id값이 잘못 올경우에 에러처리 + 데이터 가져오는
     #것까지 처리를 한다 
     
-    board_obj = get_object_or_404(Board, pk=id) 
-    board_obj.hit = board_obj.hit+1
+    board_obj = get_object_or_404(DroneDataModels, pk=id) 
     board_obj.save()
 
     context = {'board':board_obj}
@@ -61,7 +54,7 @@ def view(request, id):
 def modify(request, id):
     #수정할 내용 받아와야 한다  - 디비에서 해당 데이터를 가져온다 get_object_or_404
     #조건은 id  -> select * from board_board where id=전달받은값 
-    board_obj = get_object_or_404(Board, pk=id) ####### 
+    board_obj = get_object_or_404(DroneDataModels, pk=id) ####### 
 
     if request.method == "GET":
         context = {'board':board_obj}
@@ -73,13 +66,12 @@ def modify(request, id):
 
         board = form.save(commit=False)
         #board.hit = board.hit + 1 #조회수 하나 증가시키고 
-        board.wdate = timezone.now() #수정 시간 입력후 
         board.save() 
 
         return redirect('board:list')
 
 def delete(request, id):
-    board_obj = get_object_or_404(Board, pk=id) ####### 
+    board_obj = get_object_or_404(DroneDataModels, pk=id) ####### 
     board_obj.delete()
     return redirect('board:list')
 

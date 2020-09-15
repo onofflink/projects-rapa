@@ -11,6 +11,9 @@ import json
 # Create your views here.
 import base64
 import pymysql 
+from .models import DroneDataModels
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMAGE_DIRS=[
     os.path.join(BASE_DIR, 'image')
@@ -34,6 +37,9 @@ def save(request):
     directory = ''
     if (request.method == 'POST'):
         id = request.POST.get('d_id')
+        x = request.POST.get('x')
+        y = request.POST.get('y')
+        address = request.POST.get('add')
         print(id)
         img = request.POST.get('img')
         img = img.replace('data:image/png;base64,', '')
@@ -41,39 +47,31 @@ def save(request):
         d = base64.b64decode(img)      
         now = time.localtime()
         directory = f'./image/{id}/{now.tm_year}_{now.tm_mon}_{now.tm_mday}/'
-        print(directory)
+        print(id,x,y,address)
         try:
             os.makedirs(directory)
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
-        file = open(directory+f'p{now.tm_hour}_{now.tm_min}_{now.tm_sec}.png', mode="wb")        
+        d_name = f'p{now.tm_hour}_{now.tm_min}_{now.tm_sec}.png'
+    
+        data_to_database(id,directory,d_name,x,y,address)
+        file = open(directory+d_name, mode="wb")        
         file.write(d)
         file.close()
-       
+
+        
+
     return HttpResponse("receive")
 
 
-def kakao_to_database(url,x,y):
-    te = quote(f"x={x}&y={y}")
-    request = Request(url+te)
-    request.add_header("Authorization",KakaoAK)
-    response = urlopen(request)
-    rescode = response.getcode()
-    print(rescode)
-
-    #rescode 가 200일때 
-    if(rescode==200):
-
-        #파일 읽기 - json 형태의 데이터를 받아온다 
-        response_body = response.read()
-        #디코딩, utf-8로 디코딩 해야 한다 
-        data = response_body.decode('utf-8')
-        #json 데이터 파싱하기 , beautifulsoup -html,xml 파싱, 
-        data2 = json.loads(data)
-        documents = data2['documents'][0]
-        print(documents['address'])             
-        return (documents['address'])
-
-    else:
-        return None
+def data_to_database(d_id,img_path,img_name,x,y,address):
+    conn = pymysql.connect(host='localhost', user='user01', password='1234',port=5306,
+                       db='mydb', charset='utf8') 
+    curs = conn.cursor()
+    sql = """insert into common_dronedatamodels(d_id,img_path,img_name,x,y,address)
+            values (%s, %s, %s, %s, %s, %s)"""
+    curs.execute(sql,(d_id,img_path,img_name,x,y,address))
+    conn.commit()    
+    conn.close()
+  

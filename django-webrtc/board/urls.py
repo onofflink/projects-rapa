@@ -9,8 +9,7 @@ from . import views
 app_name='board' #이렇게 써줘야 없어진다  
 
 urlpatterns = [
-    path('', views.index),
-     
+       
     # myhome/urls.py - path('board/', include('board.urls')),
     # 내가 받은 url중에 /board ~~~ 시작하는 url이 있으면 이거는 
     # board 폴더아래에 있는 urls.py  가 처리하라 

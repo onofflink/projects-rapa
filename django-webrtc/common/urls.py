@@ -1,9 +1,7 @@
-
-
 from django.contrib import admin
 from django.urls import path, include
-
 from . import views
+
 
 #'board' is not a registered namespace
 app_name='common' #이렇게 써줘야 없어진다  
