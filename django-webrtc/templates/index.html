@@ -16,17 +16,24 @@
     <canvas id="photo"></canvas>
   </div>
 
-  <!-- capture start button: with setTimer, every 5 or 3 seconds to save gps and post to db -->
-  <div id="buttons">
-    <button id="snap">Snap</button><span> then </span><button id="send">Send</button>
-    <span> or </span>
-    <button id="snapAndSend">Snap &amp; Send</button>
+  <div>
+    <form method="post">
+      <input type="text"  id="d_id">
+    </form>
+    
   </div>
 
- <!--  <div id="incoming">
+  <div id="buttons">
+    <button id="snap">Snap</button>
+    <span> | </span><button id="start">Start</button>
+    <span> or </span>
+    <button id="stop">Stop</button>
+  </div>
+
+  <div id="incoming">
     <h2>Incoming photos</h2>
     <div id="trail"></div>
-  </div> -->
+  </div>
 
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
   <script src="{% static 'js/main.js' %}"></script>
